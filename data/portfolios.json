@@ -9,5 +9,17 @@
                 "balance": 2966.8605000000002
             }
         }
+    },
+    {
+        "user_id": 2,
+        "wallets": {}
+    },
+    {
+        "user_id": 3,
+        "wallets": {}
+    },
+    {
+        "user_id": 4,
+        "wallets": {}
     }
 ]
