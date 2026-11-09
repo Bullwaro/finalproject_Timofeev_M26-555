@@ -8,11 +8,7 @@ class Currency(ABC):
         if not name.strip():
             raise ValueError("Currency name cannot be empty")
 
-        if (
-            not code.isalpha()
-            or not code.isupper()
-            or not 2 <= len(code) <= 5
-        ):
+        if not code.isalpha() or not code.isupper() or not 2 <= len(code) <= 5:
             raise ValueError("Invalid currency code")
 
         self.name = name
@@ -33,20 +29,11 @@ class FiatCurrency(Currency):
         self.issuing_country = issuing_country
 
     def get_display_info(self) -> str:
-        return (
-            f"[FIAT] {self.code} — {self.name} "
-            f"(Issuing: {self.issuing_country})"
-        )
+        return f"[FIAT] {self.code} — {self.name} (Issuing: {self.issuing_country})"
 
 
 class CryptoCurrency(Currency):
-    def __init__(
-        self,
-        name: str,
-        code: str,
-        algorithm: str,
-        market_cap: float
-    ):
+    def __init__(self, name: str, code: str, algorithm: str, market_cap: float):
         super().__init__(name, code)
 
         if not algorithm.strip():
@@ -69,7 +56,7 @@ CURRENCIES = {
     "USD": FiatCurrency("US Dollar", "USD", "United States"),
     "EUR": FiatCurrency("Euro", "EUR", "Eurozone"),
     "BTC": CryptoCurrency("Bitcoin", "BTC", "SHA-256", 1.12e12),
-    "ETH": CryptoCurrency("Ethereum", "ETH", "Ethash", 3.5e11)
+    "ETH": CryptoCurrency("Ethereum", "ETH", "Ethash", 3.5e11),
 }
 
 

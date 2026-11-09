@@ -1,5 +1,7 @@
 import hashlib
 from datetime import datetime
+from typing import ClassVar
+
 from valutatrade_hub.core.exceptions import InsufficientFundsError
 
 
@@ -10,7 +12,7 @@ class User:
         username: str,
         hashed_password: str,
         salt: str,
-        registration_date: datetime
+        registration_date: datetime,
     ):
         self._user_id = user_id
         self._username = username
@@ -48,7 +50,7 @@ class User:
         return {
             "user_id": self._user_id,
             "username": self._username,
-            "registration_date": self._registration_date.isoformat()
+            "registration_date": self._registration_date.isoformat(),
         }
 
     def change_password(self, new_password: str):
@@ -60,9 +62,7 @@ class User:
         ).hexdigest()
 
     def verify_password(self, password: str):
-        hashed_password = hashlib.sha256(
-            (password + self._salt).encode()
-        ).hexdigest()
+        hashed_password = hashlib.sha256((password + self._salt).encode()).hexdigest()
 
         return hashed_password == self._hashed_password
 
@@ -103,29 +103,22 @@ class Wallet:
             raise ValueError("Amount must be positive")
 
         if amount > self.balance:
-            raise InsufficientFundsError(
-                self.balance,
-                amount,
-                self.currency_code
-            )
+            raise InsufficientFundsError(self.balance, amount, self.currency_code)
 
         self.balance -= amount
 
     def get_balance_info(self):
-        return {
-            "currency_code": self.currency_code,
-            "balance": self.balance
-        }
+        return {"currency_code": self.currency_code, "balance": self.balance}
 
 
 class Portfolio:
-    exchange_rates = {
+    exchange_rates: ClassVar[dict[str, float]] = {
         "USD": 1.0,
         "EUR": 1.08,
-        "BTC": 65000.0
+        "BTC": 65000.0,
     }
 
-    def __init__(self, user: User, wallets: dict = None):
+    def __init__(self, user: User, wallets: dict | None = None):
         self._user = user
         self._wallets = wallets.copy() if wallets else {}
 
