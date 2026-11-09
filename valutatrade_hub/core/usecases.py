@@ -4,6 +4,12 @@ from datetime import datetime
 
 from valutatrade_hub.core.models import User
 from valutatrade_hub.core.utils import load_json, save_json
+from valutatrade_hub.core.currencies import get_currency
+from valutatrade_hub.core.exceptions import (
+    CurrencyNotFoundError,
+    InsufficientFundsError,
+)
+
 
 
 USERS_FILE = "data/users.json"
@@ -246,9 +252,10 @@ def sell_currency(user: User, currency: str, amount: float):
     old_balance = wallets[currency]["balance"]
 
     if amount > old_balance:
-        raise ValueError(
-            f"Недостаточно средств: доступно {old_balance:.4f} "
-            f"{currency}, требуется {amount:.4f} {currency}"
+        raise InsufficientFundsError(
+            old_balance,
+            amount,
+            currency
         )
 
     new_balance = old_balance - amount
@@ -285,6 +292,9 @@ def get_rate(from_currency: str, to_currency: str):
         or not to_currency.isalpha()
     ):
         raise ValueError("Некорректный код валюты")
+
+    get_currency(from_currency)
+    get_currency(to_currency)
 
     rates_data = load_json(RATES_FILE)
 
