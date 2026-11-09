@@ -1,0 +1,29 @@
+[project]
+name = "finalproject-timofeev-m26-555"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Bullwaro", email = "kirill.timofeev.2003@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "prettytable>=3.18.0",
+]
+
+[project.scripts]
+finalproject = "finalproject_timofeev_m26_555:main"
+
+[build-system]
+requires = ["uv_build>=0.12.21,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.4",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = ["venv", ".venv", "dist", "__pycache__"]
